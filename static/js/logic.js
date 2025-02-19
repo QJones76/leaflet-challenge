@@ -19,7 +19,12 @@ let earthquakeLayer = L.layerGroup();
 let tectonicPlatesLayer = L.layerGroup();
 
 // Add a control to the map that will allow the user to change which layers are visible.
+let overlayMaps = {
+  "Earthquakes": earthquakeLayer,
+  "Tectonic Plates": tectonicPlatesLayer
+};
 
+L.control.layers(null, overlayMaps, {collapsed: false}).addTo(baseMap);
 
 // Make a request that retrieves the earthquake geoJSON data.
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function (data) {
@@ -129,12 +134,5 @@ legend.addTo(baseMap);
     // Then add the tectonic_plates layer to the map.
     }).addTo(tectonicPlatesLayer);
   });
-
-let overlayMaps = {
-  "Earthquakes": earthquakeLayer,
-  "Tectonic Plates": tectonicPlatesLayer
-};
-
-L.control.layers(null, overlayMaps, {collapsed: false}).addTo(baseMap);
 
 });
