@@ -10,8 +10,25 @@ let baseLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/service
 	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 });
 
+let darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	subdomains: 'abcd',
+	maxZoom: 20
+});
+
+let basicLayer = L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles courtesy of the <a href="https://usgs.gov/">U.S. Geological Survey</a>',
+  maxZoom: 20
+});
+
 // Then add the 'basemap' tile layer to the map.
 baseLayer.addTo(baseMap);
+
+let baseMaps = {
+  "Satellite": baseLayer,
+  "Dark Map": darkLayer,
+  "Basic Map": basicLayer
+}
 
 // OPTIONAL: Step 2
 // Create the layer groups, base maps, and overlays for our two sets of data, earthquakes and tectonic_plates.
@@ -24,7 +41,7 @@ let overlayMaps = {
   "Tectonic Plates": tectonicPlatesLayer
 };
 
-L.control.layers(null, overlayMaps, {collapsed: false}).addTo(baseMap);
+L.control.layers(baseMaps, overlayMaps, {collapsed: false}).addTo(baseMap);
 
 // Make a request that retrieves the earthquake geoJSON data.
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function (data) {
@@ -48,12 +65,12 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
 
   // This function determines the color of the marker based on the depth of the earthquake.
   function getColor(depth) {
-    if (depth > 90) return "#ff0000";
-    if (depth > 70) return "#ff6600";
-    if (depth > 50) return "#ffcc00";
-    if (depth > 30) return "#ccff33";
-    if (depth > 10) return "#66ff66";
-    return "#00ff00";
+    if (depth > 90) return "#990000";
+    if (depth > 70) return "#cc3300";
+    if (depth > 50) return "#ff6600";
+    if (depth > 30) return "#ffcc00";
+    if (depth > 10) return "#ccff33";
+    return "#99ff99";
   }
 
   // This function determines the radius of the earthquake marker based on its magnitude.
@@ -99,13 +116,12 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
 
     // Initialize depth intervals and colors for the legend
     let depths = [-10, 10, 30, 50, 70, 90];
-    let colors = ["#00ff00", "#66ff66", "#ccff33", "#ffcc00", "#ff6600", "#ff0000"];
 
     // Loop through our depth intervals to generate a label with a colored square for each interval.
     div.innerHTML += "<strong>Depth (km)</strong><br>";
     for (let i = 0; i < depths.length; i++) {
       div.innerHTML +=
-        `<i style="background: ${colors[i]}; width: 10px; height: 10px; display: inline-block;"></i>`
+        `<i style="background: ${getColor(depths[i])}; width: 10px; height: 10px; display: inline-block;"></i>`
         + depths[i] + (depths[i + 1] ? " &ndash; " + depths[i + 1] + "<br>": "+");
     }
 
