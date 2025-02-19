@@ -118,6 +118,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
     div.style.border = "1px solid black";
     div.style.borderRadius = "5px";
     div.style.fontSize = "12px";
+    div.style.hieght = "35vh";
 
     // Initialize depth intervals
     let depths = [-10, 10, 30, 50, 70, 90]; // The example picture starts at -10
