@@ -1,7 +1,7 @@
 # leaflet-challenge
 ---
 
-https://github.com/user-attachments/assets/dc3cd52b-b856-47e4-96c4-b621fb4f6cf0
+![image](https://github.com/user-attachments/assets/dc3cd52b-b856-47e4-96c4-b621fb4f6cf00)
 
 I used this project to create a map of all earthquakes from the past 7 days from this [site](https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php) for easily discovering visual trends in the frequency of certain parameters of the earthquake. 
 
