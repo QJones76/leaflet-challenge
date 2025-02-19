@@ -118,40 +118,71 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
     div.style.border = "1px solid black";
     div.style.borderRadius = "5px";
     div.style.fontSize = "12px";
-    div.style.hieght = "35vh";
+    div.style.height = "auto";
+    div.style.display = "flex"; 
+    div.style.flexDirection = "row";
+    div.style.gap = "20px";  
 
     // Initialize depth intervals
     let depths = [-10, 10, 30, 50, 70, 90]; // The example picture starts at -10
 
+    // Create a div to contain the depth legend
+    let depthDiv = document.createElement("div");
+    depthDiv.style.display = "flex";
+    depthDiv.style.flexDirection = "column";
+    depthDiv.style.alignItems = "start"; 
+
     // Give the depth section a title for this part of the legend
-    div.innerHTML += "<strong>Depth (km)</strong><br>";
+    let depthTitle = document.createElement("div");
+    depthTitle.innerHTML = "<strong>Depth (km)</strong>";
+    depthTitle.style.marginBottom = "5px";
+    depthTitle.style.fontSize = "15px";
+    depthDiv.appendChild(depthTitle);
 
     // Loop through our depth intervals to generate a label with a colored square for each interval.
     for (let i = 0; i < depths.length; i++) {
-      div.innerHTML +=
-        // Call the getColor function while styling the background color
-        `<i style="background: ${getColor(depths[i])}; width: 100%; height: 10px; display: inline-block;"></i>`
-        + depths[i] + (depths[i + 1] ? " &ndash; " + depths[i + 1] + "<br>": "+");
+        let depthItem = document.createElement("div");
+        depthItem.innerHTML = 
+            // Call the getColor function while styling the background color
+            `<i style="background: ${getColor(depths[i])}; width: 100%; height: 15px; display: inline-block; margin-right: 5px;"></i>` 
+            + depths[i] + (depths[i + 1] ? " &ndash; " + depths[i + 1] : "+");
+        depthDiv.appendChild(depthItem);
     }
 
     // Now, repeat the same process for the magnitudes legend
     // Initialize magnitudes intervals
     let magnitudes = [5.4, 5.5, 6.0, 6.1, 6.9, 7.0, 7.9, 8.0]; // I got my intervals from https://www.mtu.edu/geo/community/seismology/learn/earthquake-measure/magnitude/
 
+    // Create another div for flexDirection
+    let magnitudeDiv = document.createElement("div");
+    magnitudeDiv.style.display = "flex";
+    magnitudeDiv.style.flexDirection = "column";
+    magnitudeDiv.style.alignItems = "start"; 
+
     // Give the magnitude section a title
-    div.innerHTML += "<br><strong>Magnitude</strong><br>";
+    let magnitudeTitle = document.createElement("div");
+    magnitudeTitle.innerHTML = "<strong>Magnitude</strong>";
+    magnitudeTitle.style.marginBottom = "5px"; 
+    magnitudeTitle.style.fontSize = "15px";
+    magnitudeDiv.appendChild(magnitudeTitle);
 
     // Loop through our magnitude intervals to generate circles sizes for each interval
     for (let i = 0; i < magnitudes.length; i++) {
-      div.innerHTML +=
-        // Make sure to multiply the variables by the same amount found in the getRadius function
-        `<i style="width: ${magnitudes[i] * 3}px; height: ${magnitudes[i] * 3}px; background: black; border-radius: 50%; display: inline-block; margin-right: 5px;"></i>`
-        + magnitudes[i] + "<br>";
+        let magnitudeItem = document.createElement("div");
+        magnitudeItem.innerHTML = 
+            // Make sure to multiply the variables by the same amount found in the getRadius function
+            `<i style="width: ${Math.min(magnitudes[i] * 3, 30)}px; height: ${Math.min(magnitudes[i] * 3, 30)}px; background: black; border-radius: 50%; display: inline-block; margin-right: 5px;"></i>` 
+            + magnitudes[i];
+        magnitudeDiv.appendChild(magnitudeItem);
     }
 
-    return div;
+    // Add the child divs to the parent div
+    div.appendChild(depthDiv);
+    div.appendChild(magnitudeDiv);
 
+    return div;
   };
+
 
   // Add the legend to the map object
   legend.addTo(myMap);
